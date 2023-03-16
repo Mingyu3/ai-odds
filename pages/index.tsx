@@ -1,8 +1,19 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
 
+const Identifiers = [
+	'Function',
+	'Method',
+	'Variable',
+	'Class',
+	'Html id',
+	'Html class',
+];
+
 export default function Home() {
 	const [description, setDescription] = useState('');
+	const [result, setResult] = useState([]);
+	const [identifier, setIdentifier] = useState('Function');
 
 	function handleTextarea(event: React.ChangeEvent<HTMLTextAreaElement>) {
 		setDescription(event.target.value);
@@ -22,7 +33,10 @@ export default function Home() {
 			const response = await fetch('/api/generate', {
 				method: 'POST',
 				headers: { 'Content-type': 'application/json' },
-				body: JSON.stringify({ description: description }),
+				body: JSON.stringify({
+					description: description,
+					identifier: identifier,
+				}),
 			});
 
 			const data = await response.json();
@@ -32,13 +46,15 @@ export default function Home() {
 					new Error(`Request failed with status ${response.status}`)
 				);
 			}
+
+			setResult(data.result.split(','));
 		} catch (error: any) {
 			console.error(error);
 			alert(error.message);
 		}
 	}
 
-	function copyHandler(e: React.MouseEvent<HTMLParagraphElement>) {
+	function copyText(e: React.MouseEvent<HTMLParagraphElement>) {
 		const paragraph = e.target as HTMLParagraphElement;
 		const text = paragraph.innerHTML;
 
@@ -51,6 +67,20 @@ export default function Home() {
 				console.error('copy error: ' + error);
 			});
 	}
+
+	interface NameProps {
+		key: number;
+		name: String;
+	}
+	const Name = ({ key, name }: NameProps) => {
+		return (
+			<p
+				className='cursor-copy hover:text-zinc-400 transition duration-150 ease-out'
+				onClick={copyText}>
+				{name}
+			</p>
+		);
+	};
 
 	return (
 		<>
@@ -79,7 +109,7 @@ export default function Home() {
 							Enter a description for naming
 						</p>
 						<textarea
-							className='bg-zinc-500 text-zinc-100 w-full'
+							className='bg-zinc-500 text-zinc-100 w-full py-1 px-2'
 							onChange={handleTextarea}
 							onKeyDown={handleKeyDown}
 							value={description}
@@ -93,41 +123,11 @@ export default function Home() {
 					</div>
 				</form>
 				<div className='w-10/12 text-gray-100 mt-4'>
-					<h3 className='py-3'>Functions</h3>
-					<div className='flex flex-row justify-around border-2 p-2'>
-						<p
-							className='cursor-copy hover:text-zinc-400 transition duration-150 ease-out'
-							onClick={copyHandler}>
-							aaaaaaa
-						</p>
-						<p
-							className='cursor-copy hover:text-zinc-400 transition duration-150 ease-out'
-							onClick={copyHandler}>
-							bbbb
-						</p>
-						<p
-							className='cursor-copy hover:text-zinc-400 transition duration-150 ease-out'
-							onClick={copyHandler}>
-							ccccccc
-						</p>
-					</div>
-					<h3 className='py-3 mt-5'>Variables</h3>
-					<div className='flex flex-row justify-around border-2 p-2'>
-						<p
-							className='cursor-copy hover:text-zinc-400 transition duration-150 ease-out'
-							onClick={copyHandler}>
-							aaaaaaa
-						</p>
-						<p
-							className='cursor-copy hover:text-zinc-400 transition duration-150 ease-out'
-							onClick={copyHandler}>
-							bbbb
-						</p>
-						<p
-							className='cursor-copy hover:text-zinc-400 transition duration-150 ease-out'
-							onClick={copyHandler}>
-							ccccccc
-						</p>
+					<h3 className='py-3'>{identifier}</h3>
+					<div className='flex flex-row justify-around p-2'>
+						{result.map((text, index) => (
+							<Name key={index} name={text} />
+						))}
 					</div>
 				</div>
 			</main>

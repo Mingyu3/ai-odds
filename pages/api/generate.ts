@@ -18,6 +18,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 	}
 
 	const description = req.body.description || '';
+	const identifier = req.body.identifier || 'function';
+
 	if (description.trim().length === 0) {
 		res.status(400).json({
 			error: {
@@ -29,7 +31,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
 		const completion = await openai.createCompletion({
 			model: 'text-davinci-003',
-			prompt: generatePrompt(description),
+			prompt: generatePrompt(description, identifier),
 			temperature: 1,
 		});
 		res.status(200).json({ result: completion.data.choices[0].text });
@@ -48,11 +50,13 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 	}
 }
 
-function generatePrompt(description: String) {
-	return `Suggest three names for an function names and other three names for an variable.
-    
-    Description: ${description}
-    Functions: getUserData, calculateTotal, handleClick
-    Variables: firstName, phoneNumber, totalAmount
-    `;
+function generatePrompt(description: String, identifier: String) {
+	return `Suggest three names for a simple programming ${identifier} name.
+
+Description: 요금을 지불한 고객의 
+${identifier}: paidCustomerCount, paidCustomerTotal, totalPaidCustomers
+Description: 텍스트를 복사하는 함수
+${identifier}: copyText, duplicateText, cloneText
+Description: ${description}
+${identifier}:`;
 }
