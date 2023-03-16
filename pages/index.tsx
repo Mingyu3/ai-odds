@@ -6,8 +6,8 @@ const Identifiers = [
 	'Method',
 	'Variable',
 	'Class',
-	'Html id',
-	'Html class',
+	'Id(html)',
+	'Class(html)',
 ];
 
 export default function Home() {
@@ -104,10 +104,21 @@ export default function Home() {
 
 			<main className='flex flex-col items-center mt-5'>
 				<form className='w-10/12' onSubmit={handleSubmit}>
+					<p className='p-2 text-lg text-gray-100'>
+						Enter a description for naming
+					</p>
+					<ul className='flex items-center w-full border rounded border-zinc-100 bg-zinc-900 text-zinc-100 cursor-pointer h-10'>
+						{Identifiers.map((item, idx) => (
+							<>
+								<li
+									key={idx}
+									className='w-full text-sm text-center active:bg-zinc-700 transition ease-in-out duration-300 hover:scale-110'>
+									{item}
+								</li>
+							</>
+						))}
+					</ul>
 					<label className='mb-5'>
-						<p className='p-2 text-lg text-gray-100'>
-							Enter a description for naming
-						</p>
 						<textarea
 							className='bg-zinc-500 text-zinc-100 w-full py-1 px-2'
 							onChange={handleTextarea}
