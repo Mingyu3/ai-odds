@@ -1,5 +1,6 @@
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import CopyAlert from './components/CopyAlert';
 
 const Identifiers = [
 	'Function',
@@ -14,6 +15,7 @@ export default function Home() {
 	const [description, setDescription] = useState('');
 	const [result, setResult] = useState([]);
 	const [selectedIdentifier, setSelectedIdentifier] = useState('Function');
+	const [textCopied, setTextCopied] = useState(false);
 
 	function handleTextarea(event: React.ChangeEvent<HTMLTextAreaElement>) {
 		setDescription(event.target.value);
@@ -62,6 +64,7 @@ export default function Home() {
 			.writeText(text)
 			.then(() => {
 				console.log('copied');
+				setTextCopied(true);
 			})
 			.catch((error) => {
 				console.error('copy error: ' + error);
@@ -81,6 +84,12 @@ export default function Home() {
 			</p>
 		);
 	};
+
+	useEffect(() => {
+		setTimeout(() => {
+			setTextCopied(false);
+		}, 2000);
+	}, [textCopied]);
 
 	return (
 		<>
@@ -102,18 +111,27 @@ export default function Home() {
 				</nav>
 			</header>
 
+			{textCopied && <CopyAlert />}
+
 			<main className='flex flex-col items-center mt-5'>
 				<form className='w-10/12' onSubmit={handleSubmit}>
 					<p className='p-2 text-lg text-gray-100'>
 						Enter a description for naming
 					</p>
-					<ul className='flex items-center w-full border rounded border-zinc-100 bg-zinc-900 text-zinc-100 cursor-pointer h-10'>
+					<ul className='flex items-center w-full border rounded border-zinc-100 bg-zinc-900 cursor-pointer h-10'>
 						{Identifiers.map((item, idx) => (
 							<li
 								key={idx}
 								onClick={() => setSelectedIdentifier(item)}
-								className='w-full text-sm text-center transition ease-in-out duration-300 hover:scale-110 '>
-								<div className='active:text-zinc-300'>{item}</div>
+								className='w-full text-center transition ease-in-out duration-300 hover:scale-110 '>
+								<div
+									className={
+										selectedIdentifier === item
+											? 'text-md text-zinc-100'
+											: 'text-sm text-zinc-300'
+									}>
+									{item}
+								</div>
 							</li>
 						))}
 					</ul>
@@ -127,17 +145,19 @@ export default function Home() {
 							rows={3}></textarea>
 					</label>
 					<div className='text-right'>
-						<button type='submit' className='text-zinc-400 p-1 rounded '>
+						<button
+							type='submit'
+							className='text-zinc-300 p-1 rounded hover:bg-zinc-900 hover:text-zinc-400 active:text-zinc-200'>
 							Sumbit
 						</button>
 					</div>
 				</form>
 				<div className='w-10/12 text-gray-100 mt-4'>
 					<h3 className='py-3'>{selectedIdentifier}</h3>
-					<div className='flex flex-row justify-around p-2'>
-						{result.map((text, index) => (
-							<Name key={index} name={text} />
-						))}
+					<div className='flex flex-row justify-around border h-10 p-2'>
+						{!result[0]
+							? 'No result'
+							: result.map((text, index) => <Name key={index} name={text} />)}
 					</div>
 				</div>
 			</main>
