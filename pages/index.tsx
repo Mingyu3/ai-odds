@@ -13,7 +13,7 @@ const Identifiers = [
 export default function Home() {
 	const [description, setDescription] = useState('');
 	const [result, setResult] = useState([]);
-	const [identifier, setIdentifier] = useState('Function');
+	const [selectedIdentifier, setSelectedIdentifier] = useState('Function');
 
 	function handleTextarea(event: React.ChangeEvent<HTMLTextAreaElement>) {
 		setDescription(event.target.value);
@@ -35,7 +35,7 @@ export default function Home() {
 				headers: { 'Content-type': 'application/json' },
 				body: JSON.stringify({
 					description: description,
-					identifier: identifier,
+					identifier: selectedIdentifier,
 				}),
 			});
 
@@ -72,12 +72,12 @@ export default function Home() {
 		key: number;
 		name: String;
 	}
-	const Name = ({ key, name }: NameProps) => {
+	const Name = (props: NameProps) => {
 		return (
 			<p
 				className='cursor-copy hover:text-zinc-400 transition duration-150 ease-out'
 				onClick={copyText}>
-				{name}
+				{props.name}
 			</p>
 		);
 	};
@@ -109,13 +109,12 @@ export default function Home() {
 					</p>
 					<ul className='flex items-center w-full border rounded border-zinc-100 bg-zinc-900 text-zinc-100 cursor-pointer h-10'>
 						{Identifiers.map((item, idx) => (
-							<>
-								<li
-									key={idx}
-									className='w-full text-sm text-center active:bg-zinc-700 transition ease-in-out duration-300 hover:scale-110'>
-									{item}
-								</li>
-							</>
+							<li
+								key={idx}
+								onClick={() => setSelectedIdentifier(item)}
+								className='w-full text-sm text-center transition ease-in-out duration-300 hover:scale-110 '>
+								<div className='active:text-zinc-300'>{item}</div>
+							</li>
 						))}
 					</ul>
 					<label className='mb-5'>
@@ -134,7 +133,7 @@ export default function Home() {
 					</div>
 				</form>
 				<div className='w-10/12 text-gray-100 mt-4'>
-					<h3 className='py-3'>{identifier}</h3>
+					<h3 className='py-3'>{selectedIdentifier}</h3>
 					<div className='flex flex-row justify-around p-2'>
 						{result.map((text, index) => (
 							<Name key={index} name={text} />
