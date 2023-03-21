@@ -1,5 +1,7 @@
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import CopyAlert from './components/CopyAlert';
 
 const Identifiers = [
@@ -16,6 +18,7 @@ export default function Home() {
 	const [result, setResult] = useState([]);
 	const [selectedIdentifier, setSelectedIdentifier] = useState('Function');
 	const [textCopied, setTextCopied] = useState(false);
+	const [isSubmited, setIsSubmited] = useState(false);
 
 	function handleTextarea(event: React.ChangeEvent<HTMLTextAreaElement>) {
 		setDescription(event.target.value);
@@ -31,6 +34,8 @@ export default function Home() {
 
 	async function handleSubmit(event: any) {
 		event.preventDefault();
+		setIsSubmited(true);
+
 		try {
 			const response = await fetch('/api/generate', {
 				method: 'POST',
@@ -54,6 +59,8 @@ export default function Home() {
 			console.error(error);
 			alert(error.message);
 		}
+
+		setIsSubmited(false);
 	}
 
 	function copyText(e: React.MouseEvent<HTMLParagraphElement>) {
@@ -147,11 +154,17 @@ export default function Home() {
 							rows={3}></textarea>
 					</label>
 					<div className='text-right'>
-						<button
-							type='submit'
-							className='text-zinc-300 p-1 rounded hover:bg-zinc-900 hover:text-zinc-400 active:text-zinc-200'>
-							Sumbit
-						</button>
+						{isSubmited ? (
+							<span className='inline-block w-7 p-1 text-zinc-400 animate-spin-slow'>
+								<FontAwesomeIcon icon={faArrowsRotate} />
+							</span>
+						) : (
+							<button
+								type='submit'
+								className='text-zinc-300 p-1 rounded hover:bg-zinc-900 hover:text-zinc-400 active:text-zinc-200'>
+								Submit
+							</button>
+						)}
 					</div>
 				</form>
 				<div className='w-10/12 text-gray-100 mt-4'>
