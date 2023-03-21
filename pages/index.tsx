@@ -86,9 +86,11 @@ export default function Home() {
 	};
 
 	useEffect(() => {
-		setTimeout(() => {
-			setTextCopied(false);
-		}, 2000);
+		if (textCopied === true) {
+			setTimeout(() => {
+				setTextCopied(false);
+			}, 1000);
+		}
 	}, [textCopied]);
 
 	return (
@@ -111,7 +113,7 @@ export default function Home() {
 				</nav>
 			</header>
 
-			{textCopied && <CopyAlert />}
+			<CopyAlert show={textCopied} />
 
 			<main className='flex flex-col items-center mt-5'>
 				<form className='w-10/12' onSubmit={handleSubmit}>
@@ -127,7 +129,7 @@ export default function Home() {
 								<div
 									className={
 										selectedIdentifier === item
-											? 'text-md text-zinc-100'
+											? 'text-md text-zinc-100 font-bold'
 											: 'text-sm text-zinc-300'
 									}>
 									{item}
