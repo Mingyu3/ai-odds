@@ -9,8 +9,8 @@ const Identifiers = [
 	'Method',
 	'Variable',
 	'Class',
-	'Id(html)',
-	'Class(html)',
+	'id(HTML)',
+	'class(HTML)',
 ];
 
 export default function Home() {
