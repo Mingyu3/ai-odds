@@ -10,7 +10,6 @@ function Header() {
 		{ title: 'Naming', path: '/naming' },
 	];
 
-	console.log(router.pathname);
 	return (
 		<header className='p-3 bg-zinc-700 text-gray-100 flex items-center'>
 			<h1 className='font-bold mr-5'>
@@ -19,11 +18,13 @@ function Header() {
 			<nav>
 				<ul className='flex text-sm text-zinc-300 '>
 					{navItems.map((item) => (
-						<li>
+						<li key={item.title}>
 							<Link
 								href={item.path}
-								className={`mr-2 hover:text-zinc-400 transition duration-150 ease-out ${
-									router.asPath === item.path ? 'font-bold' : ''
+								className={`mr-4  ${
+									router.asPath === item.path
+										? 'font-bold'
+										: 'hover:text-zinc-400 transition duration-150 ease-out'
 								}`}>
 								{item.title}
 							</Link>
