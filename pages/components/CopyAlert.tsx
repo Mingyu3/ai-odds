@@ -1,10 +1,10 @@
 import React from 'react';
 
-interface Props {
+interface CopyAlertProps {
 	show: boolean;
 }
 
-const CopyAlert = ({ show }: Props) => {
+export default function CopyAlert({ show }: CopyAlertProps) {
 	return (
 		<div
 			className={`fixed flex justify-center w-full mt-2 transition-opacity duration-200 ${
@@ -15,6 +15,4 @@ const CopyAlert = ({ show }: Props) => {
 			</div>
 		</div>
 	);
-};
-
-export default CopyAlert;
+}

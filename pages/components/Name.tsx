@@ -7,7 +7,7 @@ interface NameProps {
 	setTextCopied: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Name: React.FC<NameProps> = ({ name, textCopied, setTextCopied }) => {
+export default function Name({ name, textCopied, setTextCopied }: NameProps) {
 	function copyText(e: React.MouseEvent<HTMLParagraphElement>) {
 		const paragraph = e.target as HTMLParagraphElement;
 		const text = paragraph.innerHTML;
@@ -37,6 +37,4 @@ const Name: React.FC<NameProps> = ({ name, textCopied, setTextCopied }) => {
 			{name}
 		</p>
 	);
-};
-
-export default Name;
+}
