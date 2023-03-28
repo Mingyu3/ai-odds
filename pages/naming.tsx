@@ -3,6 +3,7 @@ import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import CopyAlert from './components/CopyAlert';
+import Name from './components/Name';
 
 const Identifiers = [
 	'Function',
@@ -62,43 +63,6 @@ export default function Naming() {
 
 		setIsSubmited(false);
 	}
-
-	function copyText(e: React.MouseEvent<HTMLParagraphElement>) {
-		const paragraph = e.target as HTMLParagraphElement;
-		const text = paragraph.innerHTML;
-
-		navigator.clipboard
-			.writeText(text)
-			.then(() => {
-				console.log('copied');
-				setTextCopied(true);
-			})
-			.catch((error) => {
-				console.error('copy error: ' + error);
-			});
-	}
-
-	interface NameProps {
-		key: number;
-		name: String;
-	}
-	const Name = (props: NameProps) => {
-		return (
-			<p
-				className='cursor-copy hover:text-zinc-400 transition duration-150 ease-out'
-				onClick={copyText}>
-				{props.name}
-			</p>
-		);
-	};
-
-	useEffect(() => {
-		if (textCopied === true) {
-			setTimeout(() => {
-				setTextCopied(false);
-			}, 1000);
-		}
-	}, [textCopied]);
 
 	return (
 		<>
@@ -164,7 +128,14 @@ export default function Naming() {
 						<div className='flex flex-row justify-around border h-10 p-2'>
 							{!result[0]
 								? 'No result'
-								: result.map((text, index) => <Name key={index} name={text} />)}
+								: result.map((text, index) => (
+										<Name
+											key={index}
+											name={text}
+											textCopied={textCopied}
+											setTextCopied={setTextCopied}
+										/>
+								  ))}
 						</div>
 					</div>
 				</div>
