@@ -32,7 +32,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 		const completion = await openai.createCompletion({
 			model: 'text-davinci-003',
 			prompt: generatePrompt(description, identifier),
-			temperature: 1,
+			temperature: 0.7,
 		});
 		res.status(200).json({ result: completion.data.choices[0].text });
 	} catch (error: any) {
@@ -74,8 +74,8 @@ Description: navigation bar의 리스트의 아이템
 class(HTML): nav-list-item, nav-item, list-item
 `;
 
-const ID_HTML = `Description: 문의하기 폼을 감싸는 아이디
-id(HTML): contactFormWrapper, inquiryFormContainer, feedbackFormSection
+const ID_HTML = `Description: 문의하기 요소를 감싸는 아이디
+id(HTML): contactWrapper, inquiryContainer, feedbackSection
 Description: 비밀번호 찾기 폼
 id(HTML): passwordRecoveryForm, forgotPasswordForm, resetPasswordForm
 `;
