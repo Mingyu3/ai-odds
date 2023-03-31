@@ -8,6 +8,7 @@ function Header() {
 	const navItems = [
 		{ title: 'Home', path: '/' },
 		{ title: 'Naming', path: '/naming' },
+		{ title: 'Renaming', path: '/renaming' },
 	];
 
 	return (
